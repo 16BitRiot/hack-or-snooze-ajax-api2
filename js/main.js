@@ -36,6 +36,26 @@ async function start() {
   // "Remember logged-in user" and log in, if credentials in localStorage
   await checkForRememberedUser();
   await getAndShowStoriesOnStart();
+  async function checkForRememberedUser() {
+    console.debug("checkForRememberedUser");
+  
+    // get the saved email and password from localStorage
+    const email = localStorage.getItem("email");
+    const password = localStorage.getItem("password");
+  
+    // if both email and password are saved
+    if (email && password) {
+      // try to log in with the saved email and password
+      try {
+        const user = await login(email, password);
+        currentUser = user;
+        console.debug(`Logged in as ${currentUser.email}`);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+  
 
   // if we got a logged-in user
   if (currentUser) updateUIOnUserLogin();
